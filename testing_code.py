@@ -5,6 +5,7 @@ import math
 import board
 import busio
 from adafruit_pca9685 import PCA9685
+import keyboard
 
 class Motor: #Making a Motor class so we can access everything in one place
     def __init__(self,name,I2C_Channel,Motor_Type,DIR_Pin,ENC_Pin,Pulse_Count):
@@ -244,12 +245,27 @@ def drive_simultaneously(duty_cycle, direction, time):
     thread_back_left.join()
     thread_back_right.join()
     
-def turn_and_drive_forward(velocity, time, angle_left, angle_right, turn_direction, duty_cycle_left, duty_cycle_right):
+    
+def turn_simultaneously_time(duty_cycle_left, direction_left, duty_cycle_right, direction_right, time):
+    """
+    Threading to turn both turning drivers at the same time, for a given amount of time
+    """
+    thread_left = threading.Thread(target=drive_straight, args=(duty_cycle_left, direction_left, 4, time)) # TML
+    thread_right = threading.Thread(target=drive_straight, args=(duty_cycle_right, direction_right, 5, time)) # TMR
+    
+    thread_left.start()
+    thread_right.start()
+    
+    thread_left.join()
+    thread_right.join()
+
+def turn_and_drive_forward(velocity, time, turn_direction, duty_cycle_left, duty_cycle_right):
     """
     Threading to call both the steering and turning code at the same time
     """
     thread_steering = threading.Thread(target=drive_simultaneously, args=(velocity, 'CW', time)) # CHANGE WITH CORRECT DIRECTION
-    thread_turning = threading.Thread(target=turn_simultaneously, args=(angle_left, duty_cycle_left, turn_direction, angle_right, duty_cycle_right, turn_direction)) 
+    # thread_turning = threading.Thread(target=turn_simultaneously, args=(angle_left, duty_cycle_left, turn_direction, angle_right, duty_cycle_right, turn_direction))
+    thread_turning = threading.Thread(target=turn_simultaneously_time, args=(duty_cycle_left, turn_direction, duty_cycle_right, turn_direction, time))  
     
     thread_steering.start()
     thread_turning.start()
@@ -258,8 +274,10 @@ def turn_and_drive_forward(velocity, time, angle_left, angle_right, turn_directi
     thread_turning.join()
     
     print(f"Drove for {time} seconds and turned {turn_direction}")
-    
-    
+
+def keyboardControl():
+    pass
+
 '''
 # ========= TEST CODE / MAIN =========
 if __name__ == "__main__":
