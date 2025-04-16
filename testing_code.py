@@ -5,7 +5,7 @@ import math
 import board
 import busio
 from adafruit_pca9685 import PCA9685
-# from pynput import keyboard
+from pynput import keyboard
 
 class Motor: #Making a Motor class so we can access everything in one place
     def __init__(self,name,I2C_Channel,Motor_Type,DIR_Pin,ENC_Pin,Pulse_Count):
@@ -259,106 +259,106 @@ def turn_and_drive_forward(velocity, time, turn_direction, duty_cycle_left, duty
 ########################## REMOTE CONTROL ############################
 ######################################################################
 
-# def turn_on(duty_cycle, channel, direction):
-#     if direction == "CCW":
-#         GPIO.output(DIR_Pins[channel], GPIO.LOW)
-#     elif direction == "CW":
-#         GPIO.output(DIR_Pins[channel], GPIO.HIGH)
-#     else:
-#         raise ValueError('Direction must be "CW" or "CCW".') 
+def turn_on(duty_cycle, channel, direction):
+    if direction == "CCW":
+        GPIO.output(DIR_Pins[channel], GPIO.LOW)
+    elif direction == "CW":
+        GPIO.output(DIR_Pins[channel], GPIO.HIGH)
+    else:
+        raise ValueError('Direction must be "CW" or "CCW".') 
     
-#     set_duty_cycle(duty_cycle, channel)
+    set_duty_cycle(duty_cycle, channel)
 
-# def turn_off(channel):
-#     set_duty_cycle(0, channel)
+def turn_off(channel):
+    set_duty_cycle(0, channel)
 
-# # Motor state
-# motor_state = {
-#     'up': False,
-#     'down': False,
-#     'left': False,
-#     'right': False
-# }
+# Motor state
+motor_state = {
+    'up': False,
+    'down': False,
+    'left': False,
+    'right': False
+}
 
-# def on_press(key):
-#     print(f"pressing key {key}")
-#     try:
-#         if key == keyboard.Key.up:
-#             motor_state['up'] = True
-#         elif key == keyboard.Key.down:
-#             motor_state['down'] = True
-#         elif key == keyboard.Key.left:
-#             motor_state['left'] = True
-#         elif key == keyboard.Key.right:
-#             motor_state['right'] = True
-#         elif key.char == 'q':
-#             print("Bye Honu")
-#             return False  # Stop the listener
-#     except AttributeError:
-#         pass
+def on_press(key):
+    print(f"pressing key {key}")
+    try:
+        if key == keyboard.Key.up:
+            motor_state['up'] = True
+        elif key == keyboard.Key.down:
+            motor_state['down'] = True
+        elif key == keyboard.Key.left:
+            motor_state['left'] = True
+        elif key == keyboard.Key.right:
+            motor_state['right'] = True
+        elif key.char == 'q':
+            print("Bye Honu")
+            return False  # Stop the listener
+    except AttributeError:
+        pass
 
-# def on_release(key):
-#     if key == keyboard.Key.up:
-#         motor_state['up'] = False
-#     elif key == keyboard.Key.down:
-#         motor_state['down'] = False
-#     elif key == keyboard.Key.left:
-#         motor_state['left'] = False
-#     elif key == keyboard.Key.right:
-#         motor_state['right'] = False
+def on_release(key):
+    if key == keyboard.Key.up:
+        motor_state['up'] = False
+    elif key == keyboard.Key.down:
+        motor_state['down'] = False
+    elif key == keyboard.Key.left:
+        motor_state['left'] = False
+    elif key == keyboard.Key.right:
+        motor_state['right'] = False
 
-# def motor_loop():
-#     while True:
-#         if motor_state['up'] and not motor_state['down']:
-#             print("Moving forward")
-#             turn_on(70, 0, 'CW')
-#             turn_on(70, 1, 'CW')
-#             turn_on(70, 2, 'CW')
-#             turn_on(70, 3, 'CW')
+def motor_loop():
+    while True:
+        if motor_state['up'] and not motor_state['down']:
+            print("Moving forward")
+            turn_on(70, 0, 'CW')
+            turn_on(70, 1, 'CW')
+            turn_on(70, 2, 'CW')
+            turn_on(70, 3, 'CW')
 
-#         elif motor_state['down'] and not motor_state['up']:
-#             print("Moving backward")
-#             turn_on(70, 0, 'CCW')
-#             turn_on(70, 1, 'CCW')
-#             turn_on(70, 2, 'CCW')
-#             turn_on(70, 3, 'CCW')
+        elif motor_state['down'] and not motor_state['up']:
+            print("Moving backward")
+            turn_on(70, 0, 'CCW')
+            turn_on(70, 1, 'CCW')
+            turn_on(70, 2, 'CCW')
+            turn_on(70, 3, 'CCW')
 
-#         else:
-#             turn_off(0)
-#             turn_off(1)
-#             turn_off(2)
-#             turn_off(3)
+        else:
+            turn_off(0)
+            turn_off(1)
+            turn_off(2)
+            turn_off(3)
 
-#         if motor_state['left'] and not motor_state['right']:
-#             print("Turning left")
-#             turn_on(70, 4, 'CCW')
-#             turn_on(70, 5, 'CCW')
+        if motor_state['left'] and not motor_state['right']:
+            print("Turning left")
+            turn_on(70, 4, 'CCW')
+            turn_on(70, 5, 'CCW')
             
-#         elif motor_state['right'] and not motor_state['left']:
-#             print("Turning right")
-#             turn_on(70, 4, 'CW')
-#             turn_on(70, 5, 'CW')
-#         else:
-#             turn_off(4)
-#             turn_off(5)
-#         time.sleep(0.05)
+        elif motor_state['right'] and not motor_state['left']:
+            print("Turning right")
+            turn_on(70, 4, 'CW')
+            turn_on(70, 5, 'CW')
+        else:
+            turn_off(4)
+            turn_off(5)
+        time.sleep(0.05)
 
-# def keyboardControl():
-#     motor_thread = threading.Thread(target=motor_loop, daemon=True)
-#     motor_thread.start()
+def keyboardControl():
+    motor_thread = threading.Thread(target=motor_loop, daemon=True)
+    motor_thread.start()
 
-#     try:
-#         with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
-#             listener.join()
+    try:
+        with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
+            listener.join()
 
-#     except Exception as e:
-#         print(f"Error occurred: {e}")
+    except Exception as e:
+        print(f"Error occurred: {e}")
     
-#     finally:
-#         print("Cleaning up motors and GPIO")
-#         for ch in range(6):
-#             turn_off(ch)
-#         GPIO.cleanup()
+    finally:
+        print("Cleaning up motors and GPIO")
+        for ch in range(6):
+            turn_off(ch)
+        GPIO.cleanup()
     
 
 '''
