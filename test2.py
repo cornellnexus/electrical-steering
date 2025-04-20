@@ -5,7 +5,7 @@ import math
 import board
 import busio
 from adafruit_pca9685 import PCA9685
-from pynsshkeyboardput import listen_keyboard, stop_listening
+from sshkeyboard import listen_keyboard, stop_listening
 
 class Motor: #Making a Motor class so we can access everything in one place
     def __init__(self,name,I2C_Channel,Motor_Type,DIR_Pin,ENC_Pin,Pulse_Count):
@@ -157,7 +157,7 @@ def motor_loop():
         else:
             turn_off(4)
             turn_off(5)
-        time.sleep(0.05)
+        sleep(0.05)
 
 
 def press(key):
