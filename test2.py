@@ -127,17 +127,17 @@ def motor_loop():
     while True:
         if motor_state['up'] and not motor_state['down']:
             print("Moving forward")
-            turn_on(70, 0, 'CW')
-            turn_on(70, 1, 'CW')
-            turn_on(70, 2, 'CW')
-            turn_on(70, 3, 'CW')
+            turn_on(50, 0, 'CW')
+            turn_on(50, 1, 'CW')
+            turn_on(50, 2, 'CW')
+            turn_on(50, 3, 'CW')
 
         elif motor_state['down'] and not motor_state['up']:
             print("Moving backward")
-            turn_on(70, 0, 'CCW')
-            turn_on(70, 1, 'CCW')
-            turn_on(70, 2, 'CCW')
-            turn_on(70, 3, 'CCW')
+            turn_on(50, 0, 'CCW')
+            turn_on(50, 1, 'CCW')
+            turn_on(50, 2, 'CCW')
+            turn_on(50, 3, 'CCW')
 
         else:
             turn_off(0)
@@ -147,13 +147,13 @@ def motor_loop():
 
         if motor_state['left'] and not motor_state['right']:
             print("Turning left")
-            turn_on(70, 4, 'CCW')
-            turn_on(70, 5, 'CCW')
+            turn_on(20, 4, 'CCW')
+            turn_on(20, 5, 'CCW')
             
         elif motor_state['right'] and not motor_state['left']:
             print("Turning right")
-            turn_on(70, 4, 'CW')
-            turn_on(70, 5, 'CW')
+            turn_on(20, 4, 'CW')
+            turn_on(20, 5, 'CW')
         else:
             turn_off(4)
             turn_off(5)
