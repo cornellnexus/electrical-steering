@@ -6,7 +6,7 @@ This repo contains:
 ### Running the code
 From any machine, ssh into the raspberry pi (must be powered on). Ask someone on software for the IP address and password.
 
-Then, navigate to the Desktop folder using `cd Desktop`.
+Then, navigate to wherever electrical_steering is located on the pi.
 From there:
 1. Run `git pull`. If there's any local changes that aren't committed you can probably stash them.
 2. Currently, our code isn't made for just running a script, so to run the code, open a python terminal by typing `python3`. Your command line should now start with `>>>`.
