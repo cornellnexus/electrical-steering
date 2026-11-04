@@ -54,20 +54,20 @@ GPIO.cleanup()
 GPIO.setmode(GPIO.BOARD)
 
 # ========= EXPANDER HELPER FUNCTIONS =========
- def exp_write(address, pin, value):
+def exp_write(address, pin, value):
     current_val = bus.read_byte_data(address, GPIO_REG)
 
     if value:
-        current |= (1 << pin)
+        current_val |= (1 << pin)
     else:
-        current &= ~(1 << pin)
+        current_val &= ~(1 << pin)
     
     bus.write_byte_data(address, GPIO.REG, current_val)
 
- def exp_read(address, pin):
+def exp_read(address, pin):
     current_val = bus.read_byte_data(address, GPIO_REG)
 
-    return (current << pin) & 1
+    return (current_val << pin) & 1
 
 
 # ========= PCA9685 SETUP =========
@@ -93,30 +93,30 @@ def set_duty_cycle(percent, channel):
 def read_direction(motor):
     pin = DIR_Pins[motor]
 
-    if pin["type"] == "RPI"
+    if pin["type"] == "RPI":
         return GPIO.input(pin["pin"])
-    if pin["type"] == GPIOEXP_1
+    if pin["type"] == "GPIOEXP_1":
         return exp_read(MCP1, pin["pin"])
-    if pin["type"] == GPIOEXP_2
+    if pin["type"] == "GPIOEXP_2":
         return exp_read(MCP2, pin["pin"])
 
 def set_direction(motor, value):
     pin = DIR_Pins[motor]
 
-    if pin["type"] == "RPI"
+    if pin["type"] == "RPI":
         GPIO.output(pin["pin"], value)
-    if pin["type"] == GPIOEXP_1
+    if pin["type"] == "GPIOEXP_1":
         exp_write(MCP1, pin["pin"], value)
-    if pin["type"] == GPIOEXP_2
+    if pin["type"] == "GPIOEXP_2":
         exp_write(MCP2, pin["pin"], value)
 
 
-def run_motor(motor, direction percent, PWMchannel){
+def run_motor(motor, direction, percent, PWMchannel):
     set_direction(motor, direction)
     set_duty_cycle(percent, PWMchannel)
-}
+    
 
-'''
+
 # ========= TEST CODE / MAIN =========
 if __name__ == "__main__":
     try:
@@ -156,4 +156,3 @@ if __name__ == "__main__":
             set_duty_cycle(0, channel)
         pca9685.deinit()
         GPIO.cleanup()
-'''
